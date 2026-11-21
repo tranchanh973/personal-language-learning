@@ -1,3 +1,4 @@
+import { factoryLessons } from './factory-lessons';
 import { factoryWords } from './factory-words';
 
 export type Level = 'HSK 1' | 'HSK 2' | 'HSK 3' | 'HSK 4';
@@ -37,13 +38,12 @@ export const words: readonly Word[] = [
   ...factoryWords,
 ];
 
-export interface Lesson {
+export type Lesson = {
   id: string;
   title: string;
   level: Level;
-  text: string;
   note: string;
-}
+} & ({ text: string } | { example: Translation; practice: string });
 
 export const lessons: readonly Lesson[] = [
   {id:'greetings',title:'Chào hỏi và giới thiệu',level:'HSK 1',text:'Mẫu câu: 我是学生。 (wǒ shì xuésheng.) — Tôi là học sinh.',note:'Cấu trúc: Chủ ngữ + 是 (shì — là) + danh từ. Ví dụ: 她是老师。 (tā shì lǎoshī.) — Cô ấy là giáo viên.'},
@@ -53,4 +53,5 @@ export const lessons: readonly Lesson[] = [
   {id:'factory-shift',title:'Hỏi giờ vào ca và xin hỗ trợ',level:'HSK 2',text:'我明天几点上班？ (Wǒ míngtiān jǐ diǎn shàngbān?) — Mai tôi vào ca lúc mấy giờ?',note:'Khi chưa biết cách làm, hỏi 你能教我怎么做吗？ (Nǐ néng jiāo wǒ zěnme zuò ma?) — Bạn chỉ tôi cách làm được không?'},
   {id:'factory-safety',title:'Báo máy dừng và nhờ tổ trưởng',level:'HSK 3',text:'二号车间的机器停了，请通知组长。 (Èr hào chējiān de jīqì tíng le, qǐng tōngzhī zǔzhǎng.) — Máy ở xưởng số 2 đã dừng, vui lòng báo tổ trưởng.',note:'Khi báo sự cố, nói rõ vị trí, thiết bị và dấu hiệu bạn quan sát thấy. Ví dụ 有异常声音。 (Yǒu yìcháng shēngyīn.) — Có tiếng kêu bất thường.'},
   {id:'factory-qc',title:'Báo hàng lỗi và bàn giao ca',level:'HSK 4',text:'这一批有三个不良品，已经单独放好了。 (Zhè yì pī yǒu sān ge bùliángpǐn, yǐjīng dāndú fàng hǎo le.) — Lô này có ba sản phẩm lỗi, đã để riêng rồi.',note:'Khi bàn giao, nêu lô, số lượng và phần việc còn lại. 还需要复检。 (Hái xūyào fùjiǎn.) — Vẫn cần kiểm tra lại.'},
+  ...factoryLessons,
 ];

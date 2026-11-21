@@ -1,6 +1,6 @@
 # Chinese Quest · 小中文
 
-Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js có 202 mục từ vựng và 7 bài học theo cấp luyện HSK 1–4. Các cấp là gợi ý độ khó thực hành và có từ chuyên ngành nhà máy ngoài danh sách thi. Từ vựng, Flashcard và Quiz dùng chung bộ lọc theo cấp và theo môi trường nhà máy.
+Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js có 202 mục từ vựng và 31 bài học theo cấp luyện HSK 1–4. Các cấp là gợi ý độ khó thực hành và có từ chuyên ngành nhà máy ngoài danh sách thi. Tab Bài học có bộ lọc theo cấp và các bài tình huống nhà máy kèm nút nghe câu mẫu và bài tập nói. Từ vựng, Flashcard và Quiz dùng chung bộ lọc theo cấp và theo môi trường nhà máy.
 
 ## Chạy trên máy
 
