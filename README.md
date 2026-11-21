@@ -4,7 +4,7 @@ Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js giữ 18 t
 
 ## Chạy trên máy
 
-Cài [Node.js 24 LTS](https://nodejs.org/) (đã kèm npm), [Git](https://git-scm.com/downloads) và VS Code. VS Code có sẵn hỗ trợ TypeScript. Live Server dành cho bản HTML cũ.
+Dùng [Node.js 26.x hoặc 24 LTS](https://nodejs.org/) với npm 11.x. Nếu máy đã có Node.js 26.13.1 và npm 11.20.0, dùng trực tiếp hai phiên bản đó. Cài [Git](https://git-scm.com/downloads) và VS Code. VS Code có sẵn hỗ trợ TypeScript. Live Server dành cho bản HTML cũ.
 
 Nếu đã clone repo, mở thư mục trong VS Code và chạy trong **Terminal → New Terminal**:
 
