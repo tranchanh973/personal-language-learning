@@ -1,6 +1,6 @@
 # Chinese Quest · 小中文
 
-Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js giữ 18 từ vựng và 3 bài học mẫu HSK 1–2, cùng Dashboard, Flashcard, Quiz, lịch ôn và theo dõi tiến độ. Dữ liệu mẫu hiện tại chưa phải giáo trình đầy đủ theo chuẩn HSK 3.0.
+Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js có 202 mục từ vựng và 7 bài học theo cấp luyện HSK 1–4. Các cấp là gợi ý độ khó thực hành và có từ chuyên ngành nhà máy ngoài danh sách thi. Từ vựng, Flashcard và Quiz dùng chung bộ lọc theo cấp và theo môi trường nhà máy.
 
 ## Chạy trên máy
 
@@ -34,4 +34,6 @@ Trong Vercel chọn **Add New → Project**, kết nối GitHub và cấp quyề
 - `src/progress/` xử lý lưu, chuyển đổi tiến độ, XP và lịch ôn.
 - `src/styles/` chứa CSS dùng chung cho desktop và mobile.
 
-Giai đoạn tiếp theo là đối chiếu nội dung theo từng cấp của HSK 3.0, xây bài học theo chủ đề và dùng chung kho từ vựng giữa lộ trình, Flashcard, Quiz và Ôn tập.
+## Ảnh nền nội dung
+
+Đặt ảnh ở `public/content-background.jpg` hoặc `public/content-background.webp` trước khi chạy build. Ảnh sẽ hiện dưới các phần nội dung, còn thanh điều hướng có nền riêng.

@@ -71,6 +71,8 @@ button{cursor:pointer}
 .nav button:nth-child(4) .nav-icon, .footer-nav button:nth-child(4) .nav-icon { color: #9a4b24; background: #ffecd9; }
 .nav button:nth-child(5) .nav-icon, .footer-nav button:nth-child(5) .nav-icon { color: #805709; background: #fff1c9; }
 .nav button:nth-child(6) .nav-icon, .footer-nav button:nth-child(6) .nav-icon { color: #22697a; background: #dff5f7; }
+.content { min-width: 0; }
+.content-with-background { background-position: center top; background-size: cover; }
 .main{padding:26px;max-width:1100px;width:100%;margin:0 auto;min-width:0}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
 .tag{background:#fff1d5;color:#805309;padding:9px 14px;border-radius:20px;font-weight:800}
@@ -173,3 +175,8 @@ button:focus-visible, select:focus-visible, label:focus-within { outline: 3px so
 .quiz-hanzi { font-size: 62px; }
 .backup-actions { justify-content: flex-start; }
 .backup-actions label { cursor: pointer; display: inline-flex; align-items: center; }
+
+.study-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; }
+.study-filters label { display: flex; align-items: center; gap: 8px; }
+.study-filters input { width: 20px; height: 20px; accent-color: #244c89; }
+.word-context { margin-inline-start: 8px; color: #53627a; font-size: 13px; }

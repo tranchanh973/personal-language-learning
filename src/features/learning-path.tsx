@@ -5,7 +5,7 @@ export function LearningPath({ completed, complete }: {
   complete: (id: string) => void;
 }) {
   return <>
-    <h1>📚 Lộ trình học HSK 1–2</h1>
+    <h1>📚 Lộ trình học HSK 1–4</h1>
     <p className="muted">Học theo chủ đề, từ dễ đến khó.</p>
     {lessons.map((lesson, index) => {
       const done = completed.includes(lesson.id);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { words } from '../content/curriculum';
+import { words, type Level } from '../content/curriculum';
 import { finishLesson, isDue, parseBackup, recordWord, type Progress } from '../progress/model';
 import { useProgress } from '../progress/use-progress';
 import { Dashboard } from './dashboard';
@@ -30,11 +30,16 @@ const tabs = [
 ] as const;
 type Tab = typeof tabs[number][0];
 
-export function ChineseQuest() {
+function filterStudyWords(level: Level | 'all', factoryOnly: boolean) {
+  return words.filter(word => (level === 'all' || word.level === level) && (!factoryOnly || word.factory));
+}
+
+export function ChineseQuest({ background }: { background?: string }) {
   const { progress, setProgress, ready, storageError, restoreProgress } = useProgress();
   const [tab, setTab] = useState<Tab>('home');
   const [lessonTarget, setLessonTarget] = useState<string>();
-  const [level, setLevel] = useState('all');
+  const [level, setLevel] = useState<Level | 'all'>('all');
+  const [factoryOnly, setFactoryOnly] = useState(false);
   const [cardIndex, setCardIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [question, setQuestion] = useState<Question | null>(null);
@@ -59,9 +64,11 @@ export function ChineseQuest() {
   const due = words.filter(word => isDue(progress, word.id, now));
   const learnedCount = words.filter(word => progress.learned.includes(word.id)).length;
 
+  const studyWords = filterStudyWords(level, factoryOnly);
+
   function nextQuestion() {
     selectedQuestion.current = null;
-    setQuestion(createQuestion(question?.word.id));
+    setQuestion(createQuestion(studyWords, question?.word.id));
   }
 
   function go(next: Tab, lessonId?: string) {
@@ -86,13 +93,22 @@ export function ChineseQuest() {
     setProgress(current => recordWord(current, question.word.id, id === question.word.id, 'quiz', date));
   }
 
+  function changeStudyFilter(nextLevel: Level | 'all', nextFactoryOnly: boolean) {
+    setLevel(nextLevel);
+    setFactoryOnly(nextFactoryOnly);
+    setCardIndex(0);
+    setFlipped(false);
+    selectedQuestion.current = null;
+    setQuestion(tab === 'quiz' ? createQuestion(filterStudyWords(nextLevel, nextFactoryOnly)) : null);
+  }
+
   function rateFlash(remembered: boolean) {
-    const word = words[cardIndex];
+    const word = studyWords[cardIndex];
     if (!ready || !word || !flipped) return;
     const date = Date.now();
     setNow(date);
     setProgress(current => recordWord(current, word.id, remembered, 'flash', date));
-    setCardIndex((cardIndex + 1) % words.length);
+    setCardIndex((cardIndex + 1) % studyWords.length);
     setFlipped(false);
   }
 
@@ -160,25 +176,38 @@ export function ChineseQuest() {
       </div>
         <nav className="nav" aria-label="Điều hướng chính">{navigation}</nav>
       </aside>
-      <main className="main">
-        <header className="top"><strong>🇨🇳 Chinese Quest <span className="muted">· HSK 1–2</span></strong>
-          <span className="tag">⭐ {progress.xp} XP</span>
-        </header>
-        {storageError && <p role="status" className="feedback">Trình duyệt không tải hoặc lưu được tiến độ. Bạn có thể dùng tệp JSON để sao lưu.</p>}
-        {tab === 'home' && <Dashboard progress={progress} dueCount={due.length} go={go} />}
-        {tab === 'lessons' && <LearningPath completed={progress.completed} complete={id => {
-          if (!ready) return;
-          const date = Date.now();
-          setProgress(current => finishLesson(current, id, date));
-        }} />}
-        {tab === 'words' && <Vocabulary level={level} changeLevel={setLevel} learned={progress.learned} />}
-        {tab === 'flash' && <Flashcards index={cardIndex} flipped={flipped} flip={() => setFlipped(!flipped)} rate={rateFlash} />}
-        {tab === 'quiz' && <Quiz question={question} answer={answer} next={nextQuestion} />}
-        {tab === 'review' && <Reviews due={due} learnedCount={learnedCount} progress={progress} revealed={revealed}
-          reveal={id => setRevealed(previous => new Set(previous).add(id))} rate={rateReview}
-          exportBackup={exportBackup} importBackup={importBackup} message={message}
-          pendingBackup={pendingBackup} confirmBackup={confirmBackup} cancelBackup={() => setPendingBackup(null)} />}
-      </main>
+      <div className={background ? 'content content-with-background' : 'content'}
+        style={background ? { backgroundImage: `linear-gradient(#f4f7fbad, #f4f7fbd9), url(${background})` } : undefined}>
+        <main className="main">
+          <header className="top"><strong>🇨🇳 Chinese Quest <span className="muted">· HSK 1–4</span></strong>
+            <span className="tag">⭐ {progress.xp} XP</span>
+          </header>
+          {storageError && <p role="status" className="feedback">Trình duyệt không tải hoặc lưu được tiến độ. Bạn có thể dùng tệp JSON để sao lưu.</p>}
+          {tab === 'home' && <Dashboard progress={progress} dueCount={due.length} go={go} />}
+          {tab === 'lessons' && <LearningPath completed={progress.completed} complete={id => {
+            if (!ready) return;
+            const date = Date.now();
+            setProgress(current => finishLesson(current, id, date));
+          }} />}
+          {(tab === 'words' || tab === 'flash' || tab === 'quiz') && <div className="study-filters card">
+            <label>Cấp luyện
+              <select value={level} onChange={event => changeStudyFilter(event.target.value as Level | 'all', factoryOnly)}>
+                <option value="all">Tất cả</option>
+                {(['HSK 1', 'HSK 2', 'HSK 3', 'HSK 4'] as const).map(item => <option key={item}>{item}</option>)}
+              </select>
+            </label>
+            <label><input type="checkbox" checked={factoryOnly}
+              onChange={event => changeStudyFilter(level, event.target.checked)} /> Chỉ từ dùng ở nhà máy</label>
+          </div>}
+          {tab === 'words' && <Vocabulary words={studyWords} learned={progress.learned} />}
+          {tab === 'flash' && <Flashcards words={studyWords} index={cardIndex} flipped={flipped} flip={() => setFlipped(!flipped)} rate={rateFlash} />}
+          {tab === 'quiz' && <Quiz question={question} answer={answer} next={nextQuestion} />}
+          {tab === 'review' && <Reviews due={due} learnedCount={learnedCount} progress={progress} revealed={revealed}
+            reveal={id => setRevealed(previous => new Set(previous).add(id))} rate={rateReview}
+            exportBackup={exportBackup} importBackup={importBackup} message={message}
+            pendingBackup={pendingBackup} confirmBackup={confirmBackup} cancelBackup={() => setPendingBackup(null)} />}
+        </main>
+      </div>
     </div>
     <nav className="footer-nav" aria-label="Điều hướng di động">{navigation}</nav>
   </>;

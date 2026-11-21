@@ -1,4 +1,4 @@
-import { words, type Word } from '../content/curriculum';
+import type { Word } from '../content/curriculum';
 import { Speak } from './shared';
 
 export interface Question {
@@ -16,7 +16,7 @@ function shuffle<T>(items: readonly T[]) {
   return result;
 }
 
-export function createQuestion(previousId?: string): Question | null {
+export function createQuestion(words: readonly Word[], previousId?: string): Question | null {
   const candidates = words.length > 1 ? words.filter(word => word.id !== previousId) : words;
   const word = candidates[Math.floor(Math.random() * candidates.length)];
   if (!word) return null;

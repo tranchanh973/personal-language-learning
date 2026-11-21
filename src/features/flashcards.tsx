@@ -1,7 +1,8 @@
-import { words } from '../content/curriculum';
+import type { Word } from '../content/curriculum';
 import { Speak } from './shared';
 
-export function Flashcards({ index, flipped, flip, rate }: {
+export function Flashcards({ words, index, flipped, flip, rate }: {
+  words: readonly Word[];
   index: number;
   flipped: boolean;
   flip: () => void;
