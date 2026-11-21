@@ -104,13 +104,17 @@ export function recordWord(
   progress: Progress, id: string, correct: boolean, source: 'flash' | 'quiz' | 'review', now: number,
 ) {
   if (source === 'review' && !isDue(progress, id, now)) return progress;
-  const step = correct ? Math.min((progress.reviews[id]?.step ?? 0) + 1, intervals.length) : 0;
+  const previousReview = progress.reviews[id];
+  const step = correct ? Math.min((previousReview?.step ?? 0) + 1, intervals.length) : 0;
   const next = now + (correct ? intervals[step - 1] * dayMs : 0);
+  const reviews = previousReview && previousReview.next > now
+    ? progress.reviews
+    : { ...progress.reviews, [id]: { step, next } };
   const points = correct ? (source === 'quiz' ? 15 : 10) : (source === 'review' ? 0 : 2);
   return award({
     ...progress,
     learned: correct && !progress.learned.includes(id) ? [...progress.learned, id] : progress.learned,
-    reviews: { ...progress.reviews, [id]: { step, next } },
+    reviews,
     quizTotal: progress.quizTotal + Number(source === 'quiz'),
     quizCorrect: progress.quizCorrect + Number(source === 'quiz' && correct),
   }, points, now);

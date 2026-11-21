@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { words } from '../content/curriculum';
-import { finishLesson, isDue, parseBackup, recordWord } from '../progress/model';
+import { finishLesson, isDue, parseBackup, recordWord, type Progress } from '../progress/model';
 import { useProgress } from '../progress/use-progress';
 import { Dashboard } from './dashboard';
 import { Flashcards } from './flashcards';
@@ -33,12 +33,15 @@ type Tab = typeof tabs[number][0];
 export function ChineseQuest() {
   const { progress, setProgress, ready, storageError, restoreProgress } = useProgress();
   const [tab, setTab] = useState<Tab>('home');
+  const [lessonTarget, setLessonTarget] = useState<string>();
   const [level, setLevel] = useState('all');
   const [cardIndex, setCardIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [question, setQuestion] = useState<Question | null>(null);
   const selectedQuestion = useRef<Question | null>(null);
   const [revealed, setRevealed] = useState<ReadonlySet<string>>(() => new Set());
+  const backupRequest = useRef(0);
+  const [pendingBackup, setPendingBackup] = useState<Progress | null>(null);
   const [message, setMessage] = useState('');
   const [now, setNow] = useState(0);
   useEffect(() => {
@@ -47,6 +50,12 @@ export function ChineseQuest() {
     const timer = window.setInterval(refresh, 60_000);
     return () => window.clearInterval(timer);
   }, []);
+  useEffect(() => {
+    if (!lessonTarget) return;
+    const lesson = document.getElementById(`lesson-${lessonTarget}`);
+    lesson?.focus({ preventScroll: true });
+    lesson?.scrollIntoView({ block: 'start' });
+  }, [lessonTarget]);
   const due = words.filter(word => isDue(progress, word.id, now));
   const learnedCount = words.filter(word => progress.learned.includes(word.id)).length;
 
@@ -55,8 +64,12 @@ export function ChineseQuest() {
     setQuestion(createQuestion(question?.word.id));
   }
 
-  function go(next: Tab) {
+  function go(next: Tab, lessonId?: string) {
     setTab(next);
+    setLessonTarget(lessonId);
+    backupRequest.current += 1;
+    setPendingBackup(null);
+    setMessage('');
     setNow(Date.now());
     setRevealed(new Set());
     if (next === 'quiz' && !question) nextQuestion();
@@ -75,7 +88,7 @@ export function ChineseQuest() {
 
   function rateFlash(remembered: boolean) {
     const word = words[cardIndex];
-    if (!ready || !word) return;
+    if (!ready || !word || !flipped) return;
     const date = Date.now();
     setNow(date);
     setProgress(current => recordWord(current, word.id, remembered, 'flash', date));
@@ -102,15 +115,25 @@ export function ChineseQuest() {
   }
 
   async function importBackup(file: File) {
+    const request = ++backupRequest.current;
+    setPendingBackup(null);
     try {
       const imported = parseBackup(await file.text());
-      restoreProgress(imported);
-      setNow(Date.now());
-      setRevealed(new Set());
-      setMessage('Đã nhập tiến độ!');
+      if (request !== backupRequest.current) return;
+      setMessage('');
+      setPendingBackup(imported);
     } catch {
-      setMessage('Tệp tiến độ không hợp lệ.');
+      if (request === backupRequest.current) setMessage('Tệp tiến độ không hợp lệ.');
     }
+  }
+
+  function confirmBackup() {
+    if (!pendingBackup) return;
+    restoreProgress(pendingBackup);
+    setNow(Date.now());
+    setRevealed(new Set());
+    setPendingBackup(null);
+    setMessage('Đã nhập tiến độ!');
   }
 
   const navigation = tabs.map(([id, label]) => <button key={id}
@@ -153,7 +176,8 @@ export function ChineseQuest() {
         {tab === 'quiz' && <Quiz question={question} answer={answer} next={nextQuestion} />}
         {tab === 'review' && <Reviews due={due} learnedCount={learnedCount} progress={progress} revealed={revealed}
           reveal={id => setRevealed(previous => new Set(previous).add(id))} rate={rateReview}
-          exportBackup={exportBackup} importBackup={importBackup} message={message} />}
+          exportBackup={exportBackup} importBackup={importBackup} message={message}
+          pendingBackup={pendingBackup} confirmBackup={confirmBackup} cancelBackup={() => setPendingBackup(null)} />}
       </main>
     </div>
     <nav className="footer-nav" aria-label="Điều hướng di động">{navigation}</nav>

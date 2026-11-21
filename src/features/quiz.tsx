@@ -43,8 +43,13 @@ export function Quiz({ question, answer, next }: {
     <p className="muted">Chọn nghĩa tiếng Việt đúng. Mỗi đáp án đúng nhận 15 XP.</p>
     <div className="card">
       <span className="pill">{word.level}</span><p className="muted">Từ này có nghĩa là gì?</p>
-      <div className="hanzi quiz-hanzi" lang="zh-Hans">{word.hanzi}</div>
-      <h3>{word.pinyin} <Speak word={word} label="🔊" /></h3>
+      <div className="study-word">
+        <div>
+          <div className="hanzi quiz-hanzi" lang="zh-Hans">{word.hanzi}</div>
+          <p className="study-pinyin">{word.pinyin}</p>
+        </div>
+        <Speak word={word} label="🔊 Phát âm" />
+      </div>
       {choices.map(choice => {
         const result = selected === null ? '' : choice.id === word.id ? ' correct' : choice.id === selected ? ' wrong' : '';
         return <button className={`choice${result}`} key={choice.id} disabled={selected !== null}

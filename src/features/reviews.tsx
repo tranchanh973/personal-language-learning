@@ -1,8 +1,9 @@
-import type { Word } from '../content/curriculum';
+import { lessons, words, type Word } from '../content/curriculum';
 import type { Progress } from '../progress/model';
 import { Metric } from './shared';
 
-export function Reviews({ due, learnedCount, progress, revealed, reveal, rate, exportBackup, importBackup, message }: {
+export function Reviews({ due, learnedCount, progress, revealed, reveal, rate, exportBackup, importBackup, message,
+  pendingBackup, confirmBackup, cancelBackup }: {
   due: readonly Word[];
   learnedCount: number;
   progress: Progress;
@@ -12,6 +13,9 @@ export function Reviews({ due, learnedCount, progress, revealed, reveal, rate, e
   exportBackup: () => void;
   importBackup: (file: File) => Promise<void>;
   message: string;
+  pendingBackup: Progress | null;
+  confirmBackup: () => void;
+  cancelBackup: () => void;
 }) {
   const accuracy = progress.quizTotal ? Math.round(100 * progress.quizCorrect / progress.quizTotal) : 0;
   return <>
@@ -42,6 +46,16 @@ export function Reviews({ due, learnedCount, progress, revealed, reveal, rate, e
         }} />
       </label>
     </p>
+    {pendingBackup && <section className="card backup-preview" aria-labelledby="backup-preview-title">
+      <h3 id="backup-preview-title">Xác nhận nhập tiến độ</h3>
+      <p role="status">Bản sao có {pendingBackup.xp} XP, {words.filter(word => pendingBackup.learned.includes(word.id)).length} từ đã học
+        và {lessons.filter(lesson => pendingBackup.completed.includes(lesson.id)).length} bài đã hoàn thành.
+        Nếu tiếp tục, bản sao sẽ thay tiến độ hiện tại trên trình duyệt này.</p>
+      <div className="row backup-actions">
+        <button className="btn secondary" onClick={cancelBackup}>Hủy</button>
+        <button className="btn" onClick={confirmBackup}>Thay tiến độ</button>
+      </div>
+    </section>}
     {message && <p role="status">{message}</p>}
     <p className="muted">Tiến độ lưu trong trình duyệt này. Xuất bản sao để chuyển tiến độ sang thiết bị hoặc địa chỉ web khác.</p>
   </>;
