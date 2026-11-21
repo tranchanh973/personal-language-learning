@@ -4,7 +4,7 @@ Website tự học tiếng Trung bằng tiếng Việt. Bản Next.js giữ 18 t
 
 ## Chạy trên máy
 
-Dùng [Node.js 26.x hoặc 24 LTS](https://nodejs.org/) với npm 11.x. Nếu máy đã có Node.js 26.13.1 và npm 11.20.0, dùng trực tiếp hai phiên bản đó. Cài [Git](https://git-scm.com/downloads) và VS Code. VS Code có sẵn hỗ trợ TypeScript. Live Server dành cho bản HTML cũ.
+Dùng [Node.js 26.x hoặc 24 LTS](https://nodejs.org/) với npm 11.x. Nếu máy đã có Node.js 26.13.1 và npm 11.20.0, dùng trực tiếp hai phiên bản đó. Cài [Git](https://git-scm.com/downloads) và VS Code. VS Code có sẵn hỗ trợ TypeScript.
 
 Nếu đã clone repo, mở thư mục trong VS Code và chạy trong **Terminal → New Terminal**:
 
@@ -24,7 +24,7 @@ Trong Vercel chọn **Add New → Project**, kết nối GitHub và cấp quyề
 
 ## Chuyển tiến độ từ bản HTML
 
-Ở bản HTML, mở **Ôn tập → Xuất tiến độ JSON**. Trên bản Next.js, mở **Ôn tập → Nhập tiến độ** và chọn tệp vừa tải. LocalStorage được tách theo giao thức, tên miền và cổng. Bản Next.js đọc được cả tệp JSON từ mẫu đầu tiên và định dạng ID của bản HTML trên GitHub. Tệp `index.html` ở thư mục gốc dùng để mở bản HTML cũ.
+Ở bản HTML, mở **Ôn tập → Xuất tiến độ JSON**. Trên bản Next.js, mở **Ôn tập → Nhập tiến độ** và chọn tệp vừa tải. LocalStorage được tách theo giao thức, tên miền và cổng. Bản Next.js đọc được cả tệp JSON từ mẫu đầu tiên và định dạng ID của bản HTML trên GitHub.
 
 ## Kiến trúc
 

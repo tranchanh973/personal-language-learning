@@ -12,11 +12,72 @@ body {
 button,input,select{font:inherit}
 button{cursor:pointer}
 .app{display:grid;grid-template-columns:235px 1fr;min-height:100vh}
-.sidebar{background:#fffafd;border-right:2px solid #eedce9;padding:25px 17px;position:sticky;top:0;height:100vh}
-.logo{font-weight:900;font-size:24px;color:#58b92b;margin-bottom:30px}
+.sidebar {
+  background: linear-gradient(160deg, #edf7ff, #fbf4fc 55%, #fff0e9);
+  border-right: 1px solid #e5d7e7;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  color: #213568;
+  font-size: 20px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  color: white;
+  background: linear-gradient(145deg, #315baf, #8b4d95 68%, #b54b74);
+  box-shadow: 0 3px 8px #57438835;
+}
+.logo-mark svg { width: 24px; height: 24px; }
 .nav{display:flex;flex-direction:column;gap:8px}
-.nav button{background:transparent;border:0;text-align:left;padding:13px 16px;border-radius:14px;font-weight:800;color:#64748b}
-.nav button.active{color:#3a9c1d;background:#eaf8e7;border:2px solid #a8e394}
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 750;
+  color: #425474;
+  background: transparent;
+}
+.nav button:hover { background: #ffffffb8; }
+.nav button.active {
+  color: #233970;
+  background: #fff;
+  border-color: #d9d7f3;
+  box-shadow: 0 3px 10px #483d8312;
+}
+.nav-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: #365cb0;
+  background: #e6efff;
+}
+.nav-icon svg { width: 19px; height: 19px; }
+.nav button:nth-child(2) .nav-icon, .footer-nav button:nth-child(2) .nav-icon { color: #7048a0; background: #efe5ff; }
+.nav button:nth-child(3) .nav-icon, .footer-nav button:nth-child(3) .nav-icon { color: #a73563; background: #ffe5ef; }
+.nav button:nth-child(4) .nav-icon, .footer-nav button:nth-child(4) .nav-icon { color: #9a4b24; background: #ffecd9; }
+.nav button:nth-child(5) .nav-icon, .footer-nav button:nth-child(5) .nav-icon { color: #805709; background: #fff1c9; }
+.nav button:nth-child(6) .nav-icon, .footer-nav button:nth-child(6) .nav-icon { color: #22697a; background: #dff5f7; }
 .main{padding:26px;max-width:1100px;width:100%;margin:auto}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
 .tag{background:#fff1d5;color:#b87512;padding:9px 14px;border-radius:20px;font-weight:800}
@@ -115,8 +176,22 @@ select,input{border:2px solid #e1e8ee;border-radius:12px;padding:10px;background
 .hero::after{right:15%;top:12%;opacity:.55}
 .hero h1{font-size:25px}
 .footer-nav{position:fixed;bottom:0;left:0;right:0;background:#fffafd;border-top:2px solid #eedce9;display:flex;justify-content:space-around;z-index:3;padding:7px 2px}
-.footer-nav button{border:0;background:none;font-size:11px;font-weight:800;color:#66758b;padding:8px 3px}
-.footer-nav button.active{color:#43a524}
+.footer-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 750;
+  color: #425474;
+  padding: 4px 2px;
+}
+.footer-nav button.active { color: #233970; background: #fff; border-color: #d9d7f3; }
+.footer-nav .nav-icon { width: 27px; height: 27px; border-radius: 8px; }
+.footer-nav .nav-icon svg { width: 17px; height: 17px; }
 .metric{font-size:24px}
 }
 @media(max-width:380px){.grid{grid-template-columns:1fr}

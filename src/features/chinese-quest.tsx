@@ -11,13 +11,22 @@ import { createQuestion, Quiz, type Question } from './quiz';
 import { Reviews } from './reviews';
 import { Vocabulary } from './vocabulary';
 
+const navIcons = {
+  home: <path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 21v-8h6v8"/>,
+  lessons: <path d="M12 6v15m0-15C9 3 6 3 3 4v14c3-1 6-1 9 3 3-4 6-4 9-3V4c-3-1-6-1-9 2z"/>,
+  words: <path d="M4 5h16v14H4zM8 9h8m-8 4h5"/>,
+  flash: <><rect x="7" y="6" width="13" height="15" rx="2"/><path d="M4 17V5a2 2 0 0 1 2-2h12m-5 7v7m-3.5-3.5h7"/></>,
+  quiz: <><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></>,
+  review: <path d="M20 5v5h-5M4 19v-5h5m11-4a8 8 0 0 0-14-4m-2 8a8 8 0 0 0 14 4"/>,
+};
+
 const tabs = [
-  ['home', '🏠', 'Trang chủ'],
-  ['lessons', '📚', 'Bài học'],
-  ['words', '🀄', 'Từ vựng'],
-  ['flash', '🃏', 'Flashcard'],
-  ['quiz', '🎯', 'Quiz'],
-  ['review', '🔁', 'Ôn tập'],
+  ['home', 'Trang chủ'],
+  ['lessons', 'Bài học'],
+  ['words', 'Từ vựng'],
+  ['flash', 'Flashcard'],
+  ['quiz', 'Quiz'],
+  ['review', 'Ôn tập'],
 ] as const;
 type Tab = typeof tabs[number][0];
 
@@ -104,13 +113,28 @@ export function ChineseQuest() {
     }
   }
 
-  const navigation = tabs.map(([id, icon, label]) => <button key={id}
+  const navigation = tabs.map(([id, label]) => <button key={id}
     className={tab === id ? 'active' : undefined} aria-current={tab === id ? 'page' : undefined}
-    onClick={() => go(id)}>{icon} {label}</button>);
+    onClick={() => go(id)}>
+    <span className="nav-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        {navIcons[id]}
+      </svg>
+    </span>
+    <span>{label}</span>
+  </button>);
 
   return <>
     <div className="app">
-      <aside className="sidebar"><div className="logo">🐼 <span lang="zh-Hans">小中文</span></div>
+      <aside className="sidebar"><div className="logo">
+        <span className="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="m15.7 8.3-2.1 5.3-5.3 2.1 2.1-5.3z" fill="currentColor" />
+          </svg>
+        </span>
+        <span lang="en">Chinese Quest</span>
+      </div>
         <nav className="nav" aria-label="Điều hướng chính">{navigation}</nav>
       </aside>
       <main className="main">
